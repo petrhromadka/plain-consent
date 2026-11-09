@@ -1,0 +1,27 @@
+{
+  "name": "plain-consent",
+  "version": "2.0.0",
+  "description": "Plain Consent: a free, dependency-free cookie consent banner, built on vanilla-cookieconsent. Opt-in, Google Consent Mode v2, Subresource Integrity, strict-CSP friendly.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "author": "Petr Hromádka (Socionet, https://socionet.cz)",
+  "homepage": "https://github.com/petrhromadka/plain-consent",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/petrhromadka/plain-consent.git"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node --test 'src/*.test.ts'",
+    "check": "tsc --noEmit",
+    "build": "node scripts/build.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "6.0.3",
+    "vanilla-cookieconsent": "3.1.0"
+  }
+}
