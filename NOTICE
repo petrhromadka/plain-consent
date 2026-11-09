@@ -1,0 +1,52 @@
+Plain Consent
+Copyright (c) 2026 Petr Hromádka (Socionet, https://socionet.cz)
+Licensed under the MIT License, see LICENSE.
+
+Third-party software
+====================
+
+Every published release (releases/vX.Y.Z/plain-consent.js and plain-consent.css;
+v1.0.0 was published as cookie-lista.js and cookie-lista.css) includes, verbatim and unmodified, files of vanilla-cookieconsent 3.1.0:
+
+  Project:    vanilla-cookieconsent (CookieConsent v3)
+  Author:     Orest Bida
+  Source:     https://github.com/orestbida/cookieconsent (tag v3.1.0)
+  Licence:    MIT
+  Files used: dist/cookieconsent.umd.js, dist/cookieconsent.css
+  SHA-256:    bc6e2f2e6381fc025b27a6b0afb5a0e1fc689c6f9fc40a78708adb2054ef4575 (umd.js)
+              ca046b8b1b1094107205988e7096a687b241c8ef5f3fefe5e543ed28d26646c1 (css)
+
+Plain Consent is an independent project built on that library. It is not
+affiliated with or endorsed by the author of vanilla-cookieconsent. The
+library's own code and behaviour are the work of its author; what this
+repository adds is src/runtime.ts (configuration, escaping, Google Consent
+Mode v2, the settings button), src/theme.css, the generator logic in
+src/generator.ts and the build.
+
+The licence of vanilla-cookieconsent follows. It is also carried, together
+with the licence of Plain Consent, in the header of every released file and
+in releases/vX.Y.Z/LICENSE.txt, as the licence requires.
+
+----------------------------------------------------------------------
+
+MIT License
+
+Copyright (c) 2020-2025 Orest Bida
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
