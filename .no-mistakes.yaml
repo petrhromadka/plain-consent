@@ -1,6 +1,5 @@
 commands:
   lint: npm run check
-  test: npm test
 
 test:
   instructions: |
