@@ -1,0 +1,7 @@
+commands:
+  lint: npm run check
+  test: npm test
+
+test:
+  instructions: |
+    Tests are node --test over src/*.test.ts, offline, no browser.
