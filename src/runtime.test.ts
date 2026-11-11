@@ -6,12 +6,18 @@ import {
   contrast,
   defaultConfig,
   defaultTexts,
+  embedSize,
   escapeHtml,
+  flatText,
+  languages,
   normalizeConfig,
+  offeredCategories,
   safeUrl,
   start,
   storedCategories,
+  textLimits,
   themeVariables,
+  translations,
   vendorConfig,
   type VendorApi,
 } from "./runtime.ts";
@@ -204,33 +210,49 @@ test("button text always reads on the accent, links take the accent only when it
 });
 
 // A minimal stand-in for the page the published file runs on.
-function fakePage(json: string | null, cookie = "", readyState = "loading") {
+function fakePage(json: string | null, cookie = "", readyState = "loading", options: { lang?: string; gpc?: boolean } = {}) {
   const props = new Map<string, string>();
   const classes = new Set<string>();
-  const listeners: Record<string, () => void> = {};
+  const listeners: Record<string, (event?: unknown) => void> = {};
   const appended: unknown[] = [];
+  const events: { type: string; detail: unknown }[] = [];
   const doc = {
     readyState,
     cookie,
     getElementById: (id: string) => (id === configElementId && json !== null ? { textContent: json } : null),
-    documentElement: { style: { setProperty: (n: string, v: string) => props.set(n, v) }, classList: { add: (c: string) => classes.add(c) } },
+    documentElement: { lang: options.lang ?? "", style: { setProperty: (n: string, v: string) => props.set(n, v) }, classList: { add: (c: string) => classes.add(c) } },
     addEventListener: (type: string, fn: () => void) => (listeners[type] = fn),
+    dispatchEvent: (event: { type: string; detail: unknown }) => events.push(event),
+    querySelectorAll: () => [],
     body: { appendChild: (el: unknown) => appended.push(el) },
     createElement: () => ({ setAttribute() {}, appendChild() {}, addEventListener() {} }),
     createElementNS: () => ({ setAttribute() {}, appendChild() {} }),
   };
   const warnings: string[] = [];
-  const win = { console: { warn: (m: string) => warnings.push(m) } } as unknown as Window & { dataLayer?: unknown[]; console?: Console };
+  const win = {
+    console: { warn: (m: string) => warnings.push(m) },
+    navigator: { globalPrivacyControl: options.gpc },
+    CustomEvent: class {
+      type: string;
+      detail: unknown;
+      constructor(type: string, init: { detail: unknown }) {
+        this.type = type;
+        this.detail = init.detail;
+      }
+    },
+  } as unknown as Parameters<typeof start>[0];
   const runs: Record<string, unknown>[] = [];
   let accepted: string[] = [];
   const cc: VendorApi = {
     run: (c) => runs.push(c),
     showPreferences: () => {},
     getUserPreferences: () => ({ acceptedCategories: accepted }),
+    acceptCategory: (c) => (accepted = c),
+    hide: () => {},
   };
   start(win, doc as unknown as Document, cc);
   const layer = () => (win.dataLayer ?? []).map((entry) => Array.from(entry as ArrayLike<unknown>));
-  return { win, layer, props, classes, listeners, runs, appended, warnings, accept: (c: string[]) => (accepted = c) };
+  return { win, layer, props, classes, listeners, runs, appended, warnings, events, accept: (c: string[]) => (accepted = c) };
 }
 
 test("the Consent Mode default is in the dataLayer before the page goes on, as Arguments", () => {
@@ -280,4 +302,78 @@ test("a broken snippet still asks with the defaults and warns in the console", (
   assert.equal(page.runs.length, 1);
   assert.equal(page.warnings.length, 1);
   assert.equal(page.layer()[0]?.[1], "default");
+});
+
+test("every language has every text within its limit, and Czech stays the default", () => {
+  assert.deepEqual([...languages].sort(), Object.keys(translations).sort());
+  for (const code of languages) {
+    for (const key of Object.keys(textLimits) as (keyof typeof textLimits)[]) {
+      const text = translations[code][key];
+      assert.ok(text.length > 0 && text.length <= textLimits[key], `${code} ${key}`);
+      assert.equal(text, flatText(text), `${code} ${key} is one clean line`);
+    }
+    assert.ok(translations[code].embedMessage.includes("{category}"), `${code} embedMessage names the category`);
+    for (const key of ["necessaryTitle", "preferencesCategoryTitle", "analyticsTitle", "marketingTitle"] as const) {
+      assert.ok(!/[&<>"']/.test(translations[code][key]), `${code} ${key} has no character a screen reader would read as code`);
+    }
+  }
+  assert.equal(normalizeConfig({}).config.language, "cs");
+  assert.deepEqual(normalizeConfig({}).config.texts, defaultTexts);
+});
+
+test("language: a fixed code picks the texts, auto follows <html lang> and falls back to English, owner texts win", () => {
+  assert.equal(normalizeConfig({ language: "de" }).config.texts.acceptAll, translations.de.acceptAll);
+  assert.equal(normalizeConfig({ language: "auto" }, "sk-SK").config.texts.acceptAll, translations.sk.acceptAll);
+  assert.equal(normalizeConfig({ language: "auto" }, "PL").config.texts.acceptAll, translations.pl.acceptAll);
+  assert.equal(normalizeConfig({ language: "auto" }, "fr").config.texts.acceptAll, translations.en.acceptAll);
+  assert.equal(normalizeConfig({ language: "auto" }, "").config.texts.acceptAll, translations.en.acceptAll);
+  const custom = normalizeConfig({ language: "en", texts: { title: "Hello", acceptAll: translations.en.acceptAll } });
+  assert.equal(custom.config.texts.title, "Hello");
+  assert.deepEqual(custom.config.textOverrides, { title: "Hello" });
+  const wrong = normalizeConfig({ language: "fr" });
+  assert.equal(wrong.config.language, "cs");
+  assert.equal(wrong.problems.length, 1);
+  const cfg = vendorConfig(normalizeConfig({ language: "en" }).config, noop);
+  assert.equal((cfg["language"] as { default: string }).default, "en");
+  assert.equal((cfg["language"] as { translations: Record<string, Translation> }).translations["en"]?.consentModal["acceptAllBtn"], translations.en.acceptAll);
+});
+
+test("Global Privacy Control: marketing is not offered, never granted and explained; the owner can switch it off", () => {
+  const config = normalizeConfig({ categories: ["preferences", "analytics", "marketing"] }).config;
+  assert.deepEqual(offeredCategories(config, { gpc: false }), ["preferences", "analytics", "marketing"]);
+  assert.deepEqual(offeredCategories(config, { gpc: true }), ["preferences", "analytics"]);
+  assert.deepEqual(offeredCategories({ ...config, respectGpc: false }, { gpc: true }), ["preferences", "analytics", "marketing"]);
+  const cfg = vendorConfig(config, noop, { gpc: true }) as Record<string, any>;
+  assert.ok(!("marketing" in cfg["categories"]), "the library does not know marketing, so its scripts never run");
+  const sections = translation(cfg).preferencesModal.sections;
+  assert.deepEqual(sections.map((s) => s["linkedCategory"]).filter(Boolean), ["necessary", "preferences", "analytics"]);
+  assert.ok(sections.some((s) => s["description"] === defaultTexts.gpcNotice));
+
+  // An earlier choice that granted marketing is not honoured while the browser sends the signal.
+  const earlier = cookieOf({ ...valid, categories: ["necessary", "analytics", "marketing"] });
+  const page = fakePage(JSON.stringify({ categories: ["analytics", "marketing"] }), earlier, "complete", { gpc: true });
+  assert.deepEqual(page.layer()[2], ["consent", "update", consentState(["necessary", "analytics"])]);
+  const off = fakePage(JSON.stringify({ categories: ["analytics", "marketing"], respectGpc: false }), earlier, "complete", { gpc: true });
+  assert.equal((off.layer()[2]?.[2] as Record<string, string>)["ad_storage"], "granted");
+});
+
+test("the page is told about every change of the accepted categories, once", () => {
+  const page = fakePage(JSON.stringify({}), "", "complete");
+  const callbacks = page.runs[0] as { onConsent: () => void; onChange: () => void };
+  page.accept(["necessary", "analytics"]);
+  callbacks.onConsent();
+  callbacks.onChange();
+  page.accept(["necessary"]);
+  callbacks.onChange();
+  assert.deepEqual(page.events.map((e) => [e.type, e.detail]), [
+    ["plain-consent:update", { categories: ["necessary", "analytics"] }],
+    ["plain-consent:update", { categories: ["necessary"] }],
+  ]);
+});
+
+test("an embed takes its placeholder size from plain pixel attributes only", () => {
+  assert.deepEqual(embedSize("560", "315"), { width: 560, height: 315 });
+  for (const [w, h] of [["100%", "315"], ["560", null], [null, null], ["0", "10"], ["-5", "10"], ["12345", "10"], ["5e2", "10"]] as const) {
+    assert.equal(embedSize(w, h), null, `${w} ${h}`);
+  }
 });

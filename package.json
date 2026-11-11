@@ -1,6 +1,6 @@
 {
   "name": "plain-consent",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Plain Consent: a free, dependency-free cookie consent banner, built on vanilla-cookieconsent. Opt-in, Google Consent Mode v2, Subresource Integrity, strict-CSP friendly.",
   "private": true,
   "type": "module",

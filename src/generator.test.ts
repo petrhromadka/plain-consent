@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { configElementId, defaultTexts, normalizeConfig } from "./runtime.ts";
+import { configElementId, defaultTexts, normalizeConfig, translations } from "./runtime.ts";
 import { latestRelease, releaseFileName, releases, releaseUrl } from "./versions.ts";
-import { categoryTitleKeys, configForSnippet, cspEntries, footerLink, generate, jsonForHtml, snippet, taggingExamples } from "./generator.ts";
+import { categoryTitleKeys, configForSnippet, cspEntries, embedTaggingExamples, footerLink, generate, jsonForHtml, snippet, taggingExamples } from "./generator.ts";
 
 const configBlock = (html: string) => {
   const match = html.match(new RegExp(`<script type="application/json" id="${configElementId}">\\n([\\s\\S]*?)\\n</script>`));
@@ -130,4 +130,24 @@ test("several refused titles are all reported once and the clean ones are kept",
   assert.deepEqual(result.refusedTitles.sort(), ["analyticsTitle", "necessaryTitle"]);
   assert.equal(result.config.texts.marketingTitle, "Reklama");
   assert.equal(result.problems.filter((p) => p.startsWith("Názvy kategorií")).length, 1);
+});
+
+test("the snippet carries the language and the Global Privacy Control choice, texts only as changes from that language", () => {
+  const { config, snippet: html } = generate({ language: "de", respectGpc: false, texts: { acceptAll: "Alles klar", rejectAll: translations.de.rejectAll } });
+  const parsed = JSON.parse(configBlock(html));
+  assert.equal(parsed.language, "de");
+  assert.equal(parsed.respectGpc, false);
+  assert.deepEqual(parsed.texts, { acceptAll: "Alles klar" });
+  assert.deepEqual(normalizeConfig(parsed).config, config);
+});
+
+test("embed examples keep the address in data-src, never in src, and name their category", () => {
+  const { config } = normalizeConfig({ categories: ["preferences", "analytics", "marketing"] });
+  const examples = embedTaggingExamples(config);
+  assert.deepEqual(examples.map((e) => e.category), ["preferences", "marketing"]);
+  for (const example of examples) {
+    assert.match(example.code, new RegExp(`data-category="${example.category}"`));
+    assert.match(example.code, /data-src="https:\/\//);
+    assert.ok(!/\ssrc=/.test(example.code), "no src that would load before consent");
+  }
 });

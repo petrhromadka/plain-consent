@@ -24,9 +24,11 @@ export interface GeneratorResult {
 // Only the fields that differ from the banner's defaults go into the snippet, so it stays short and a later
 // release's better default text reaches a site that never changed it.
 export function configForSnippet(config: BannerConfig): Record<string, unknown> {
+  // Only the texts the owner changed from the chosen language's own texts.
   const texts: Partial<BannerTexts> = {};
   for (const key of Object.keys(defaultTexts) as (keyof BannerTexts)[]) {
-    if (config.texts[key] !== defaultTexts[key]) texts[key] = config.texts[key];
+    const changed = config.textOverrides[key];
+    if (changed !== undefined) texts[key] = changed;
   }
   return {
     accent: config.accent,
@@ -35,6 +37,8 @@ export function configForSnippet(config: BannerConfig): Record<string, unknown> 
     consentMode: config.consentMode,
     credit: config.credit,
     revision: config.revision,
+    language: config.language,
+    respectGpc: config.respectGpc,
     ...(Object.keys(texts).length > 0 && { texts }),
   };
 }
@@ -108,6 +112,25 @@ const examples: Record<OptionalCategory, { label: string; code: string }> = {
     code: `<script type="text/plain" data-category="preferences" data-src="https://example.com/widget.js"></script>`,
   },
 };
+
+// Embedded content (iframes) waits for consent like a script does: the address goes in data-src, never in src.
+const embedExamples: Partial<Record<OptionalCategory, { label: string; code: string }>> = {
+  marketing: {
+    label: "Video z YouTube (místo VIDEO_ID ID videa)",
+    code: `<iframe data-category="marketing" data-src="https://www.youtube-nocookie.com/embed/VIDEO_ID" data-title="Název videa" width="560" height="315" allowfullscreen></iframe>`,
+  },
+  preferences: {
+    label: "Mapa (například OpenStreetMap)",
+    code: `<iframe data-category="preferences" data-src="https://www.openstreetmap.org/export/embed.html?bbox=14.40,50.07,14.45,50.10" data-title="Mapa" width="600" height="400"></iframe>`,
+  },
+};
+
+export function embedTaggingExamples(config: BannerConfig): { category: OptionalCategory; label: string; code: string }[] {
+  return config.categories.flatMap((category) => {
+    const example = embedExamples[category];
+    return example ? [{ category, ...example }] : [];
+  });
+}
 
 export function taggingExamples(config: BannerConfig): { category: OptionalCategory; label: string; code: string }[] {
   return config.categories.map((category) => ({ category, ...examples[category] }));
