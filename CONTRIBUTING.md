@@ -23,22 +23,24 @@ Every site that embeds the banner pins the files with a Subresource Integrity ha
 ## Releasing a new version
 
 1. Change the source. If you change the library, pin the new version exactly in `package.json`, take the newest release that is at least two weeks old, and update `vendor` in `src/versions.ts` (version, date, git tag and commit, npm integrity, SHA-256 of `dist/cookieconsent.umd.js` and `dist/cookieconsent.css`).
-2. Build: `node scripts/build.mjs 2.1.0`. It writes `releases/v2.1.0/` and refuses a version that already exists. It prints the three SRI hashes.
+2. Build: `node scripts/build.mjs 2.2.0`. It writes `releases/v2.2.0/` and refuses a version that already exists. It prints the three SRI hashes.
 3. Append the release with those hashes to `releases` in `src/versions.ts` (append only).
 4. `npm test` must pass: the newest release must equal what the source builds.
-5. Tag the commit `v2.1.0`.
+5. Tag the commit `v2.2.0`.
 
-`node scripts/build.mjs 2.1.0 --out <dir>` makes a trial build elsewhere without touching `releases/`.
+`node scripts/build.mjs 2.2.0 --out <dir>` makes a trial build elsewhere without touching `releases/`.
 
 ## Browser test
 
 A real cross-site page under a strict Content-Security-Policy without `'unsafe-inline'`:
 
-1. Serve the newest release directory with CORS, for example `npx http-server releases/v2.0.0 -p 18787 --cors`.
-2. `node scripts/test-page.mjs /tmp/site http://localhost:18787/ releases/v2.0.0` writes the test page (the second argument is the directory URL the files are served from, ending in `/`) and says whether its integrity values equal `src/versions.ts`.
+1. Serve the newest release directory with CORS, for example `npx http-server releases/v2.1.0 -p 18787 --cors`.
+2. `node scripts/test-page.mjs /tmp/site http://localhost:18787/ releases/v2.1.0` writes the test page (the second argument is the directory URL the files are served from, ending in `/`) and says whether its integrity values equal `src/versions.ts`.
 3. Serve `/tmp/site` from another origin (for example `python3 -m http.server 18081 --bind 127.0.0.1 --directory /tmp/site`) and open `http://127.0.0.1:18081/` in Chrome started with `--disable-blink-features=AutomationControlled` (the library hides the banner from `navigator.webdriver`).
 
 Expect: before a choice no probe script is requested, no cookie exists and `window.__probe.dataLayerAtTag` holds the denied Consent Mode default; after "Přijmout vše" the probes ran and the last `dataLayer` entry is a granted update; after a reload the update precedes the tag; withdrawing in the settings deletes `_ga` and `_fbp` and sends a denied update; `/sri-mismatch.html` is blocked by the browser and nothing runs.
+
+Embeds (every test page has tagged iframes, one added late by a button): before a choice no `/embed-content.html` request is made and each iframe is hidden without a `src`, with a placeholder (none for the invalid address or the unknown category, both logged as warnings); "Povolit a zobrazit" loads only that category's embeds, saves the choice, hides the banner and focuses the iframe; withdrawing in the settings sets the iframe to `about:blank` and brings the placeholder back. Languages: `/en.html`, `/auto-de.html` (`<html lang="de">`) and `/auto-fr.html` (unsupported, so English) show the translated banner. Global Privacy Control: `/gpc.html` sets `navigator.globalPrivacyControl` like Firefox does, so marketing is missing from the settings and its embed shows the notice without a button, whatever "Přijmout vše" is pressed; `/gpc-off.html` has `respectGpc: false` and offers marketing. `window.__probe.events` lists every `plain-consent:update`.
 
 ## Style
 

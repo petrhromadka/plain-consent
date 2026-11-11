@@ -53,8 +53,87 @@
   display: none;
 }
 
+/* An iframe that waits for consent: empty and hidden, whatever the page's own styles say. */
+iframe.plain-consent-blocked {
+  display: none !important;
+}
+
+/* The placeholder in the place of a blocked iframe: why it is not shown, and the way to allow it. */
+.plain-consent-embed {
+  box-sizing: border-box;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 160px;
+  margin: 0 0 1em;
+  padding: 24px 16px;
+  border: 1px solid #c4c9ce;
+  border-radius: 8px;
+  background: #f4f5f6;
+  color: #2c2f31;
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  text-align: center;
+}
+
+.plain-consent-embed p {
+  max-width: 46ch;
+  margin: 0;
+}
+
+.plain-consent-embed-title {
+  font-weight: 600;
+}
+
+.plain-consent-embed-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.plain-consent-embed button {
+  min-width: 44px;
+  min-height: 44px;
+  margin: 0;
+  padding: 0 18px;
+  border: 2px solid var(--cc-btn-primary-bg, #30363c);
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.plain-consent-embed-allow {
+  background: var(--cc-btn-primary-bg, #30363c);
+  color: var(--cc-btn-primary-color, #fff);
+}
+
+.plain-consent-embed-allow:hover {
+  background: var(--cc-btn-primary-hover-bg, #000);
+  border-color: var(--cc-btn-primary-hover-bg, #000);
+  color: var(--cc-btn-primary-hover-color, #fff);
+}
+
+.plain-consent-embed-settings {
+  background: transparent;
+  border-color: #2c2f31;
+  color: #2c2f31;
+}
+
+.plain-consent-embed-settings:hover {
+  background: #e4e7ea;
+}
+
+.plain-consent-embed button:focus-visible {
+  outline: 3px solid #2c2f31;
+  outline-offset: 3px;
+}
+
 @media print {
-  .plain-consent-settings {
+  .plain-consent-settings,
+  .plain-consent-embed button {
     display: none;
   }
 }
