@@ -26,7 +26,18 @@ export const configElementId = "plain-consent-config";
 // The library's default consent cookie, kept so its documentation stays true for site owners.
 export const consentCookieName = "cc_cookie";
 export const consentDays = 182;
-export const creditUrl = "https://socionet.cz/nastroje/cookie-lista/";
+// The opt-in credit link of the hosted variant (config credit: true). Its text is fixed, not editable by the
+// site owner: only the language of the banner changes it.
+export const creditUrl = "https://socionet.cz/";
+
+// The words before the linked brand "Socionet", per banner language.
+export const creditPrefixes: Record<LanguageCode, string> = {
+  cs: "Lištu poskytuje ",
+  sk: "Lištu poskytuje ",
+  en: "Consent bar by ",
+  de: "Consent-Leiste von ",
+  pl: "Pasek zgody od ",
+};
 
 export const optionalCategories: readonly OptionalCategory[] = ["preferences", "analytics", "marketing"];
 
@@ -70,7 +81,7 @@ export interface BannerConfig {
   privacyUrl: string;
   // Google Consent Mode v2: default denied before any choice, updated on every choice.
   consentMode: boolean;
-  // "Vytvořeno Socionet" in the banner's footer: off unless the owner switches it on.
+  // A small "Consent bar by Socionet" link (text in the banner language, fixed) in the footer: off unless switched on.
   credit: boolean;
   // Raise it after adding a new service or purpose: the banner asks everyone again.
   revision: number;
@@ -543,8 +554,9 @@ export function vendorConfig(config: BannerConfig, callbacks: Callbacks, env: En
   const t = config.texts;
   const e = (key: TextKey) => escapeHtml(t[key]);
   const privacyLink = config.privacyUrl ? `<a href="${escapeHtml(config.privacyUrl)}">${e("privacyLabel")}</a>` : "";
+  const lang = env.lang ?? resolveLanguage(config.language, "");
   const credit = config.credit
-    ? `<span class="plain-consent-credit">Vytvořeno <a href="${creditUrl}" target="_blank" rel="nofollow noopener">Socionet</a></span>`
+    ? `<span class="plain-consent-credit">${creditPrefixes[lang]}<a href="${creditUrl}" target="_blank" rel="nofollow noopener">Socionet</a></span>`
     : "";
   const offered = offeredCategories(config, env);
   const categories: Record<string, unknown> = { necessary: { enabled: true, readOnly: true } };
@@ -565,7 +577,6 @@ export function vendorConfig(config: BannerConfig, callbacks: Callbacks, env: En
     sections.push({ title: e("marketingTitle"), description: e("gpcNotice") });
   }
   if (privacyLink) sections.push({ description: privacyLink });
-  const lang = env.lang ?? resolveLanguage(config.language, "");
   return {
     mode: "opt-in",
     autoShow: true,

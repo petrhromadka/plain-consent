@@ -7,7 +7,7 @@ A free, lightweight, dependency-free cookie consent banner with Google Consent M
 The banner speaks Czech, Slovak, English, German and Polish out of the box (Czech is the default, `"language": "auto"` follows `<html lang>`), and every text is fully configurable so you can translate it into any other language. [Česká verze níže](#česky).
 
 - **Licence:** MIT (see [LICENSE](LICENSE) and [NOTICE](NOTICE))
-- **Current release:** [`releases/v2.1.0/`](releases/v2.1.0/)
+- **Current release:** [`releases/v2.2.0/`](releases/v2.2.0/)
 - **Hosted generator (Czech):** <https://socionet.cz/nastroje/cookie-lista/>
 
 ---
@@ -48,15 +48,15 @@ Blocked embeds show a placeholder (here on a phone, in English) and the round se
 
 ### 1. Embed the Banner
 
-You can self-host the release files (recommended for v2.1.0) or use the hosted endpoint for v1.0.0.
+You can self-host the release files (recommended for v2.2.0) or use the hosted endpoint for v1.0.0.
 
-#### Option A: Self-hosted (Recommended for v2.1.0)
+#### Option A: Self-hosted (Recommended for v2.2.0)
 
-1. Download `plain-consent.js` and `plain-consent.css` from [`releases/v2.1.0/`](releases/v2.1.0/) and place them on your web server (for example at `/plain-consent/v2.1.0/`).
+1. Download `plain-consent.js` and `plain-consent.css` from [`releases/v2.2.0/`](releases/v2.2.0/) and place them on your web server (for example at `/plain-consent/v2.2.0/`).
 2. Add this snippet inside the `<head>` of your page, **before** all other scripts (especially before the Google tag):
 
 ```html
-<link rel="stylesheet" href="/plain-consent/v2.1.0/plain-consent.css" integrity="sha384-r7NJ29b3+NwyUK7PpfT49LlTn0l2x5NPSDMedN/20yRvAq+dXvcOp7paFDbfivUy" crossorigin="anonymous">
+<link rel="stylesheet" href="/plain-consent/v2.2.0/plain-consent.css" integrity="sha384-UigpuEPI8sZ22V7UM8A95UEmcs6VT3cmYC49ue/wrNcQw0Vm9Hf6SsjkLv0C7zlM" crossorigin="anonymous">
 <script type="application/json" id="plain-consent-config">
 {
   "accent": "#1f2937",
@@ -67,7 +67,7 @@ You can self-host the release files (recommended for v2.1.0) or use the hosted e
   "revision": 0
 }
 </script>
-<script src="/plain-consent/v2.1.0/plain-consent.js" integrity="sha384-BAzp45CBWuieJ8BZBRXX5Cl4n+btT5+WeyGOr88wYUwi3taWxN0VibI7dGMzyzLe" crossorigin="anonymous"></script>
+<script src="/plain-consent/v2.2.0/plain-consent.js" integrity="sha384-49/hm1U4h5BoIV9XtX4ORW+YCses85oU2wvNtqvepXLNiRpD8p2VBcdJRwRDA9Fi" crossorigin="anonymous"></script>
 ```
 
 > [!NOTE]
@@ -185,7 +185,7 @@ The banner is configured through the `<script type="application/json" id="plain-
 | `categories` | `string[]` | `["analytics", "marketing"]` | Optional categories used by your site: `"preferences"`, `"analytics"`, `"marketing"`. |
 | `privacyUrl` | `string` | `""` | Link to your privacy policy: an `http(s)` URL or a path starting with `/`. If empty, no link is displayed. |
 | `consentMode` | `boolean` | `true` | Enables Google Consent Mode v2 default denied state and consent updates. |
-| `credit` | `boolean` | `false` | Shows a subtle "Vytvořeno Socionet" link in the banner footer. |
+| `credit` | `boolean` | `false` | Shows a small "Consent bar by Socionet" link (`rel="nofollow"`, text in the banner language, not editable) in the banner footer. Off by default; it exists for the hosted variant of the banner. |
 | `revision` | `number` | `0` | Configuration revision integer (0-9999). Increment by 1 when adding new services or cookies to prompt returning visitors again. |
 | `language` | `string` | `"cs"` | Language of the built-in texts: `"cs"`, `"sk"`, `"en"`, `"de"`, `"pl"`, or `"auto"` to follow `<html lang>` (an unsupported language gets English). |
 | `respectGpc` | `boolean` | `true` | When the browser sends Global Privacy Control, marketing is not offered or granted. `false` ignores the signal. |
@@ -314,9 +314,14 @@ Published releases under `releases/vN.N.N/` are **immutable**. A published relea
 
 | Version | Released | JavaScript | CSS | Vendor Library |
 | --- | --- | --- | --- | --- |
+| **2.2.0** | 2026-11-11 | `plain-consent.js` | `plain-consent.css` | vanilla-cookieconsent 3.1.0 |
 | **2.1.0** | 2026-11-11 | `plain-consent.js` | `plain-consent.css` | vanilla-cookieconsent 3.1.0 |
 | **2.0.0** | 2026-11-09 | `plain-consent.js` | `plain-consent.css` | vanilla-cookieconsent 3.1.0 |
 | **1.0.0** | 2026-11-09 | `cookie-lista.js` | `cookie-lista.css` | vanilla-cookieconsent 3.1.0 |
+
+### What is new in 2.2.0
+
+2.2.0 is a minor version with one change: the opt-in `credit` link is now written in the banner's language ("Lištu poskytuje Socionet", "Consent bar by Socionet", ...) and points to <https://socionet.cz/> with `rel="nofollow noopener"`. It stays off unless you set `"credit": true`, and the snippets above do not enable it. Files and hashes of 1.0.0, 2.0.0 and 2.1.0 are untouched. Upgrade by replacing the two file URLs and the two `integrity` values.
 
 ### What is new in 2.1.0, and why these features
 
@@ -398,11 +403,11 @@ Plain Consent is an independent project and is not affiliated with or endorsed b
 
 ### Rychlé vložení na web
 
-1. Stáhněte `plain-consent.js` a `plain-consent.css` ze složky [`releases/v2.1.0/`](releases/v2.1.0/) na svůj server (např. do `/plain-consent/v2.1.0/`).
+1. Stáhněte `plain-consent.js` a `plain-consent.css` ze složky [`releases/v2.2.0/`](releases/v2.2.0/) na svůj server (např. do `/plain-consent/v2.2.0/`).
 2. Vložte kód do `<head>` před ostatní skripty:
 
 ```html
-<link rel="stylesheet" href="/plain-consent/v2.1.0/plain-consent.css" integrity="sha384-r7NJ29b3+NwyUK7PpfT49LlTn0l2x5NPSDMedN/20yRvAq+dXvcOp7paFDbfivUy" crossorigin="anonymous">
+<link rel="stylesheet" href="/plain-consent/v2.2.0/plain-consent.css" integrity="sha384-UigpuEPI8sZ22V7UM8A95UEmcs6VT3cmYC49ue/wrNcQw0Vm9Hf6SsjkLv0C7zlM" crossorigin="anonymous">
 <script type="application/json" id="plain-consent-config">
 {
   "accent": "#1f2937",
@@ -413,7 +418,7 @@ Plain Consent is an independent project and is not affiliated with or endorsed b
   "revision": 0
 }
 </script>
-<script src="/plain-consent/v2.1.0/plain-consent.js" integrity="sha384-BAzp45CBWuieJ8BZBRXX5Cl4n+btT5+WeyGOr88wYUwi3taWxN0VibI7dGMzyzLe" crossorigin="anonymous"></script>
+<script src="/plain-consent/v2.2.0/plain-consent.js" integrity="sha384-49/hm1U4h5BoIV9XtX4ORW+YCses85oU2wvNtqvepXLNiRpD8p2VBcdJRwRDA9Fi" crossorigin="anonymous"></script>
 ```
 
 3. Skripty vyžadující souhlas označte atributem `type="text/plain"` a kategorií `data-category="analytics"` (nebo `marketing`, `preferences`).

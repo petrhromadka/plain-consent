@@ -108,6 +108,10 @@ const variant = (extra) => snippet(normalizeConfig({ ...base_config, ...extra })
 await writeFile(`${out}/en.html`, page("Plain Consent: English", variant({ language: "en" }), { lang: "en" }));
 await writeFile(`${out}/auto-de.html`, page("Plain Consent: Deutsch (auto)", variant({ language: "auto" }), { lang: "de" }));
 await writeFile(`${out}/auto-fr.html`, page("Plain Consent: français (auto)", variant({ language: "auto" }), { lang: "fr" }));
+// The opt-in Socionet credit (credit: true) in each language; every other page has it off.
+for (const lang of ["cs", "sk", "en", "de", "pl"]) {
+  await writeFile(`${out}/credit-${lang}.html`, page(`Plain Consent: credit (${lang})`, variant({ language: lang, credit: true }), { lang }));
+}
 // Global Privacy Control: a browser that sends it (Chrome does not yet, so the page sets what Firefox, Brave and
 // DuckDuckGo set), and the same page with the owner's respectGpc switched off.
 await writeFile(`${out}/gpc-setup.js`, "Object.defineProperty(Navigator.prototype, 'globalPrivacyControl', { get: function () { return true; } });\n");

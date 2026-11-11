@@ -34,8 +34,8 @@ Every site that embeds the banner pins the files with a Subresource Integrity ha
 
 A real cross-site page under a strict Content-Security-Policy without `'unsafe-inline'`:
 
-1. Serve the newest release directory with CORS, for example `npx http-server releases/v2.1.0 -p 18787 --cors`.
-2. `node scripts/test-page.mjs /tmp/site http://localhost:18787/ releases/v2.1.0` writes the test page (the second argument is the directory URL the files are served from, ending in `/`) and says whether its integrity values equal `src/versions.ts`.
+1. Serve the newest release directory with CORS, for example `npx http-server releases/v2.2.0 -p 18787 --cors`.
+2. `node scripts/test-page.mjs /tmp/site http://localhost:18787/ releases/v2.2.0` writes the test page (the second argument is the directory URL the files are served from, ending in `/`) and says whether its integrity values equal `src/versions.ts`.
 3. Serve `/tmp/site` from another origin (for example `python3 -m http.server 18081 --bind 127.0.0.1 --directory /tmp/site`) and open `http://127.0.0.1:18081/` in Chrome started with `--disable-blink-features=AutomationControlled` (the library hides the banner from `navigator.webdriver`).
 
 Expect: before a choice no probe script is requested, no cookie exists and `window.__probe.dataLayerAtTag` holds the denied Consent Mode default; after "Přijmout vše" the probes ran and the last `dataLayer` entry is a granted update; after a reload the update precedes the tag; withdrawing in the settings deletes `_ga` and `_fbp` and sends a denied update; `/sri-mismatch.html` is blocked by the browser and nothing runs.
