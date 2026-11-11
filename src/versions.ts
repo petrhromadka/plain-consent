@@ -97,6 +97,18 @@ export const releases: readonly Release[] = [
       "LICENSE.txt": "sha384-Q3/LgG0LyClttbQ0PoWGaU+BLAdSPjC0CnLXhIN3NYgQoixCA2pkDMyVbJq5J0MK",
     },
   },
+  {
+    version: "2.2.0",
+    published: "2026-11-11",
+    vendorVersion: "3.1.0",
+    name: "plain-consent",
+    hostedAt: null,
+    integrity: {
+      "plain-consent.js": "sha384-49/hm1U4h5BoIV9XtX4ORW+YCses85oU2wvNtqvepXLNiRpD8p2VBcdJRwRDA9Fi",
+      "plain-consent.css": "sha384-UigpuEPI8sZ22V7UM8A95UEmcs6VT3cmYC49ue/wrNcQw0Vm9Hf6SsjkLv0C7zlM",
+      "LICENSE.txt": "sha384-Q3/LgG0LyClttbQ0PoWGaU+BLAdSPjC0CnLXhIN3NYgQoixCA2pkDMyVbJq5J0MK",
+    },
+  },
 ];
 
 export const latestRelease: Release = releases[releases.length - 1] as Release;

@@ -155,11 +155,35 @@ test("the library gets opt-in, equal buttons, nothing pre-ticked and no cookie w
   assert.equal(typeof (cfg["language"] as { translations: { cs: unknown } }).translations.cs, "object");
 });
 
-test("the credit is a nofollow brand link only when switched on", () => {
-  const off = translation(vendorConfig(normalizeConfig({}).config, noop)).consentModal["footer"];
-  assert.ok(!off?.includes("Socionet"));
-  const on = translation(vendorConfig(normalizeConfig({ credit: true }).config, noop)).consentModal["footer"];
-  assert.match(on ?? "", /Vytvořeno <a href="https:\/\/socionet\.cz\/nastroje\/cookie-lista\/" target="_blank" rel="nofollow noopener">Socionet<\/a>/);
+const creditFooter = (setting: object, lang: string) =>
+  ((vendorConfig(normalizeConfig(setting).config, noop)["language"] as { translations: Record<string, Translation> }).translations[lang] as Translation).consentModal["footer"] ?? "";
+
+test("the credit is off by default, in every language", () => {
+  for (const lang of languages) {
+    assert.ok(!creditFooter({ language: lang }, lang).includes("Socionet"), lang);
+    assert.ok(!creditFooter({ language: lang, credit: false, privacyUrl: "/p/" }, lang).includes("Socionet"), lang);
+  }
+});
+
+test("the credit is a nofollow Socionet link in the language of the banner", () => {
+  const link = '<a href="https://socionet.cz/" target="_blank" rel="nofollow noopener">Socionet</a>';
+  const expected = {
+    cs: "Lištu poskytuje ",
+    sk: "Lištu poskytuje ",
+    en: "Consent bar by ",
+    de: "Consent-Leiste von ",
+    pl: "Pasek zgody od ",
+  };
+  for (const lang of languages) {
+    const footer = creditFooter({ language: lang, credit: true }, lang);
+    assert.equal(footer, `<span class="plain-consent-credit">${expected[lang]}${link}</span>`, lang);
+  }
+  // Next to the privacy link, never instead of it.
+  const both = creditFooter({ language: "en", credit: true, privacyUrl: "/privacy/" }, "en");
+  assert.match(both, /^<a href="\/privacy\/">.*<\/a><span class="plain-consent-credit">Consent bar by /);
+  // The site owner cannot change the credit's text through `texts`.
+  const texts = { privacyLabel: "x", title: "y", credit: "Hacked" };
+  assert.ok(!creditFooter({ credit: true, texts }, "cs").includes("Hacked"));
 });
 
 test("Consent Mode: each category grants only its own types", () => {

@@ -1,6 +1,6 @@
 /* Plain Consent: additions to the vanilla-cookieconsent styles (the library's own CSS comes first in the same file). */
 
-/* "Vytvořeno Socionet": only when the site owner switched it on; quieter than the policy link. */
+/* The Socionet credit ("Consent bar by Socionet", in the banner language): only when the site owner switched it on; quieter than the policy link. */
 #cc-main .plain-consent-credit {
   margin-left: auto;
   color: var(--cc-footer-color);
