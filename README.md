@@ -9,6 +9,7 @@ The banner speaks Czech, Slovak, English, German and Polish out of the box (Czec
 - **Licence:** MIT (see [LICENSE](LICENSE) and [NOTICE](NOTICE))
 - **Current release:** [`releases/v2.2.0/`](releases/v2.2.0/)
 - **Hosted generator (Czech):** <https://socionet.cz/nastroje/cookie-lista/>
+- **Author:** Petr Hromádka, [Socionet](https://socionet.cz/)
 
 ---
 
