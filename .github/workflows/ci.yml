@@ -23,5 +23,6 @@ jobs:
       - run: |
           node --version
           npm ci --ignore-scripts --engine-strict
-      - run: npm run check
-      - run: npm test
+      # node --run runs the package.json scripts without npm's startup (no pre/post scripts exist).
+      - run: node --run check
+      - run: node --run test
