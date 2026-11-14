@@ -364,7 +364,7 @@ Requirements: Node.js 24 or newer.
 ```sh
 npm ci
 npm test         # runs tests: runtime, generator, and release immutability
-npm run check    # typescript check (tsc --noEmit)
+npm run check    # typescript check (TypeScript 7, tsc --noEmit)
 ```
 
 - Runtime source: [`src/runtime.ts`](src/runtime.ts)

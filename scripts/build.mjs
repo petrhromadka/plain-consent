@@ -9,13 +9,13 @@
 //
 // The release is three files: plain-consent.js (the pinned vanilla-cookieconsent UMD build, verbatim, wrapped so
 // it neither reads nor sets a global, followed by src/runtime.ts compiled by the pinned
-// TypeScript), plain-consent.css (the library's CSS, verbatim, then src/theme.css) and
+// TypeScript 6, `typescript6` in package.json, as TypeScript 7 has no JavaScript API), plain-consent.css (the library's CSS, verbatim, then src/theme.css) and
 // LICENSE.txt. The library files are checked against the SHA-256 recorded in versions.ts before use.
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-import ts from "typescript";
+import ts from "typescript6";
 import { ownLicense, vendor } from "../src/versions.ts";
 
 const site = fileURLToPath(new URL("..", import.meta.url));

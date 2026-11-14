@@ -9,7 +9,7 @@ Node.js 24 or newer (the tests run TypeScript directly, no build step).
 ```sh
 npm ci
 npm test         # banner runtime, generator, and the immutability of published releases
-npm run check    # tsc --noEmit
+npm run check    # tsc --noEmit with TypeScript 7 (the build compiles with TypeScript 6, package typescript6)
 ```
 
 ## The one rule: published releases never change
