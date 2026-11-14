@@ -16,12 +16,13 @@
   },
   "scripts": {
     "test": "node --test 'src/*.test.ts'",
-    "check": "tsc --noEmit",
+    "check": "node node_modules/typescript/bin/tsc --noEmit",
     "build": "node scripts/build.mjs"
   },
   "devDependencies": {
     "@types/node": "24.19.2",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
+    "typescript6": "npm:typescript@6.0.3",
     "vanilla-cookieconsent": "3.1.0"
   }
 }
