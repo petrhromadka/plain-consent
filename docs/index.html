@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.0/releases/v2.2.0/plain-consent.js; style-src 'self' https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.0/releases/v2.2.0/plain-consent.css; img-src 'self'; frame-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Plain Consent demo</title>
+<meta name="description" content="Live demo of Plain Consent, a free cookie consent banner: reject is as easy as accept, nothing optional runs before consent.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="demo.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.0/releases/v2.2.0/plain-consent.css" integrity="sha384-UigpuEPI8sZ22V7UM8A95UEmcs6VT3cmYC49ue/wrNcQw0Vm9Hf6SsjkLv0C7zlM" crossorigin="anonymous">
+<script type="application/json" id="plain-consent-config">
+{
+  "accent": "#1f2937",
+  "categories": ["analytics", "marketing"],
+  "consentMode": false,
+  "language": "auto",
+  "revision": 0
+}
+</script>
+<script src="demo-lang.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.0/releases/v2.2.0/plain-consent.js" integrity="sha384-49/hm1U4h5BoIV9XtX4ORW+YCses85oU2wvNtqvepXLNiRpD8p2VBcdJRwRDA9Fi" crossorigin="anonymous"></script>
+<script type="text/plain" data-category="analytics" data-src="demo-analytics.js"></script>
+</head>
+<body>
+<main>
+  <h1>Plain Consent demo</h1>
+  <p>This page embeds the banner exactly as the <a href="https://github.com/petrhromadka/plain-consent#quick-start">Quick Start</a> describes, under a strict Content-Security-Policy without <code>'unsafe-inline'</code>. Nothing here makes a request to anyone but this site and the jsDelivr copy of the two release files, which the browser checks against their Subresource Integrity hashes.</p>
+
+  <h2>Language</h2>
+  <p class="langs" id="langs">
+    <a href="?lang=cs" hreflang="cs">cs</a>
+    <a href="?lang=sk" hreflang="sk">sk</a>
+    <a href="?lang=en" hreflang="en">en</a>
+    <a href="?lang=de" hreflang="de">de</a>
+    <a href="?lang=pl" hreflang="pl">pl</a>
+  </p>
+
+  <h2>What the page knows</h2>
+  <dl>
+    <dt>Accepted categories</dt>
+    <dd id="state">no choice yet</dd>
+    <dt>Tagged analytics script (<code>type="text/plain" data-category="analytics"</code>)</dt>
+    <dd id="probe">blocked, it has not run</dd>
+  </dl>
+  <p><button type="button" data-cc="show-preferencesModal">Cookie settings</button></p>
+
+  <h2>A blocked embed</h2>
+  <p>An <code>iframe</code> with <code>data-category="marketing"</code> and its address in <code>data-src</code> loads nothing until marketing is accepted. Here the embedded page is a harmless page of this demo.</p>
+  <iframe data-category="marketing" data-src="/plain-consent/demo-embed.html" data-title="Demo embed" width="560" height="140"></iframe>
+
+  <h2>Use it on your site</h2>
+  <ul>
+    <li><a href="https://github.com/petrhromadka/plain-consent">Source, documentation and releases on GitHub</a></li>
+    <li><a href="https://socionet.cz/nastroje/cookie-lista/">Free configuration generator (Czech) on socionet.cz</a></li>
+  </ul>
+</main>
+<script src="demo.js"></script>
+</body>
+</html>

@@ -3,13 +3,16 @@
 A free, lightweight, dependency-free cookie consent banner with Google Consent Mode v2, Subresource Integrity, and strict Content-Security-Policy compliance. Built on [vanilla-cookieconsent](https://github.com/orestbida/cookieconsent) (MIT).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![npm](https://img.shields.io/npm/v/plain-consent.svg)](https://www.npmjs.com/package/plain-consent)
 
 The banner speaks Czech, Slovak, English, German and Polish out of the box (Czech is the default, `"language": "auto"` follows `<html lang>`), and every text is fully configurable so you can translate it into any other language. [Česká verze níže](#česky).
 
 - **Licence:** MIT (see [LICENSE](LICENSE) and [NOTICE](NOTICE))
 - **Current release:** [`releases/v2.2.0/`](releases/v2.2.0/)
+- **Live demo:** <https://petrhromadka.github.io/plain-consent/> (the banner under a strict CSP, five languages, a blocked script and a blocked embed)
+- **npm:** [`plain-consent`](https://www.npmjs.com/package/plain-consent), also served by jsDelivr (see [Quick Start](#quick-start))
 - **Hosted generator (Czech):** <https://socionet.cz/nastroje/cookie-lista/>
-- **Author:** Petr Hromádka, [Socionet](https://socionet.cz/)
+- **Author:** [Socionet](https://socionet.cz/)
 
 ---
 
@@ -74,7 +77,18 @@ You can self-host the release files (recommended for v2.2.0) or use the hosted e
 > [!NOTE]
 > If you host the files under a different path, update the `href` and `src` attributes. The `integrity` hashes remain unchanged because the files are byte-identical. Make sure your web server or CDN does not modify the files (such as automatic minification or script injection), or the browser will block them.
 
-#### Option B: Hosted CDN (socionet.cz - v1.0.0)
+#### Option B: jsDelivr or npm (v2.2.0)
+
+The release files are byte-identical everywhere, so the `integrity` hashes of Option A hold for every source below. Use only the `href` and `src` of the snippet above with these URLs:
+
+```text
+https://cdn.jsdelivr.net/npm/plain-consent@2.2.0/releases/v2.2.0/plain-consent.css
+https://cdn.jsdelivr.net/npm/plain-consent@2.2.0/releases/v2.2.0/plain-consent.js
+```
+
+jsDelivr also serves the git tag (`https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.0/releases/v2.2.0/plain-consent.js`, as the [live demo](https://petrhromadka.github.io/plain-consent/) does). Pin the exact version, never `@latest`, as the hashes belong to one release. To self-host from npm instead, run `npm install plain-consent` and copy the two files from `node_modules/plain-consent/releases/v2.2.0/`. As with any third-party CDN, the visitor's browser then connects to jsDelivr; self-host (Option A) if you do not want that.
+
+#### Option C: Hosted CDN (socionet.cz - v1.0.0)
 
 For websites using the author's hosted CDN endpoint (historical release v1.0.0 under the former name `cookie-lista`):
 
@@ -305,7 +319,7 @@ Key technical privacy guarantees:
 - **Automatic cookie deletion:** When a category is refused or consent is withdrawn, known first-party cookies from major platforms are automatically removed:
   - Analytics: `_ga`, `_gid`, `_gat`, `_clck`, `_clsk`, `_hj*`
   - Marketing: `_fbp`, `_fbc`, `_gcl_*`, `_ttp`, `_uet*`, `_pin_unauth`
-- **Hosted CDN requests:** If you load release files from `socionet.cz`, the visitor's browser connects to that server (proxied by Cloudflare), which naturally receives the client's IP address and user-agent string as with any web request. Self-host the release files if you prefer complete autonomy.
+- **Hosted CDN requests:** If you load release files from `socionet.cz` or jsDelivr, the visitor's browser connects to that server, which naturally receives the client's IP address and user-agent string as with any web request. Self-host the release files if you prefer complete autonomy.
 
 ---
 
@@ -401,6 +415,8 @@ Plain Consent is an independent project and is not affiliated with or endorsed b
 - **Global Privacy Control (od 2.1.0).** Pokud prohlížeč signál GPC posílá, banner marketing nenabídne a nikdy ho nepovolí (Consent Mode drží `ad_storage`, `ad_user_data` a `ad_personalization` odepřené). Vypnutí: `"respectGpc": false`.
 - **Událost `plain-consent:update` (od 2.1.0)** pro váš vlastní kód po každé volbě návštěvníka.
 - **Bezpečná konfigurace.** Veškerý text se escapuje jako HTML, odkazy se ověřují (povoleny jsou jen protokoly `http(s)` a relativní cesty `/`), chybné hodnoty bezpečně přecházejí na výchozí.
+
+Živá ukázka: <https://petrhromadka.github.io/plain-consent/>. Balíček je i na npm (`plain-consent`) a soubory vydání obsluhuje jsDelivr, viz [Quick Start](#quick-start) (stejné soubory, stejné otisky `integrity`).
 
 ### Rychlé vložení na web
 
