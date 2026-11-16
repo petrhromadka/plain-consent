@@ -3,14 +3,12 @@
 A free, lightweight, dependency-free cookie consent banner with Google Consent Mode v2, Subresource Integrity, and strict Content-Security-Policy compliance. Built on [vanilla-cookieconsent](https://github.com/orestbida/cookieconsent) (MIT).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![npm](https://img.shields.io/npm/v/plain-consent.svg)](https://www.npmjs.com/package/plain-consent)
-
 The banner speaks Czech, Slovak, English, German and Polish out of the box (Czech is the default, `"language": "auto"` follows `<html lang>`), and every text is fully configurable so you can translate it into any other language. [Česká verze níže](#česky).
 
 - **Licence:** MIT (see [LICENSE](LICENSE) and [NOTICE](NOTICE))
 - **Current release:** [`releases/v2.2.0/`](releases/v2.2.0/)
 - **Live demo:** <https://petrhromadka.github.io/plain-consent/> (the banner under a strict CSP, five languages, a blocked script and a blocked embed)
-- **npm:** [`plain-consent`](https://www.npmjs.com/package/plain-consent), also served by jsDelivr (see [Quick Start](#quick-start))
+- **CDN:** the release files are also served by jsDelivr (see [Quick Start](#quick-start))
 - **Hosted generator (Czech):** <https://socionet.cz/nastroje/cookie-lista/>
 - **Author:** [Socionet](https://socionet.cz/)
 
@@ -77,16 +75,16 @@ You can self-host the release files (recommended for v2.2.0) or use the hosted e
 > [!NOTE]
 > If you host the files under a different path, update the `href` and `src` attributes. The `integrity` hashes remain unchanged because the files are byte-identical. Make sure your web server or CDN does not modify the files (such as automatic minification or script injection), or the browser will block them.
 
-#### Option B: jsDelivr or npm (v2.2.0)
+#### Option B: jsDelivr (v2.2.0)
 
-The release files are byte-identical everywhere, so the `integrity` hashes of Option A hold for every source below. Use only the `href` and `src` of the snippet above with these URLs:
+jsDelivr serves the git tag of this repository. The release files are byte-identical, so the `integrity` hashes of Option A hold. Use only the `href` and `src` of the snippet above with these URLs (the [live demo](https://petrhromadka.github.io/plain-consent/) does exactly this):
 
 ```text
-https://cdn.jsdelivr.net/npm/plain-consent@2.2.0/releases/v2.2.0/plain-consent.css
-https://cdn.jsdelivr.net/npm/plain-consent@2.2.0/releases/v2.2.0/plain-consent.js
+https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.0/releases/v2.2.0/plain-consent.css
+https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.0/releases/v2.2.0/plain-consent.js
 ```
 
-jsDelivr also serves the git tag (`https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.0/releases/v2.2.0/plain-consent.js`, as the [live demo](https://petrhromadka.github.io/plain-consent/) does). Pin the exact version, never `@latest`, as the hashes belong to one release. To self-host from npm instead, run `npm install plain-consent` and copy the two files from `node_modules/plain-consent/releases/v2.2.0/`. As with any third-party CDN, the visitor's browser then connects to jsDelivr; self-host (Option A) if you do not want that.
+Pin the exact tag, never a branch or `@latest`, as the hashes belong to one release. As with any third-party CDN, the visitor's browser then connects to jsDelivr; self-host (Option A) if you do not want that.
 
 #### Option C: Hosted CDN (socionet.cz - v1.0.0)
 
@@ -200,11 +198,20 @@ The banner is configured through the `<script type="application/json" id="plain-
 | `categories` | `string[]` | `["analytics", "marketing"]` | Optional categories used by your site: `"preferences"`, `"analytics"`, `"marketing"`. |
 | `privacyUrl` | `string` | `""` | Link to your privacy policy: an `http(s)` URL or a path starting with `/`. If empty, no link is displayed. |
 | `consentMode` | `boolean` | `true` | Enables Google Consent Mode v2 default denied state and consent updates. |
-| `credit` | `boolean` | `false` | Shows a small "Consent bar by Socionet" link (`rel="nofollow"`, text in the banner language, not editable) in the banner footer. Off by default; it exists for the hosted variant of the banner. |
+| `credit` | `boolean` | `false` | Shows a small "Consent bar by Socionet" link (`rel="nofollow noopener"`, text in the banner language, not editable) in the banner footer. Off by default; you turn it on yourself if you want to credit the project, see [Optional credit link](#optional-credit-link). The hosted variant at socionet.cz always has it on. |
 | `revision` | `number` | `0` | Configuration revision integer (0-9999). Increment by 1 when adding new services or cookies to prompt returning visitors again. |
 | `language` | `string` | `"cs"` | Language of the built-in texts: `"cs"`, `"sk"`, `"en"`, `"de"`, `"pl"`, or `"auto"` to follow `<html lang>` (an unsupported language gets English). |
 | `respectGpc` | `boolean` | `true` | When the browser sends Global Privacy Control, marketing is not offered or granted. `false` ignores the signal. |
 | `texts` | `object` | *see below* | Text overrides for titles, descriptions, and buttons, applied on top of the chosen language. |
+
+### Optional credit link
+
+Plain Consent is free. If you like it, you can say so: add `"credit": true` to the configuration and the banner footer shows a small "Consent bar by Socionet" link next to your privacy link (in the banner language: "Lištu poskytuje Socionet", "Consent bar by Socionet", "Consent-Leiste von Socionet", "Pasek zgody od Socionet"). Nothing else changes.
+
+- **Off by default.** No snippet in this README enables it, and nothing appears unless you set it. Removing the line removes the link.
+- **Plain brand text.** The linked text is the name "Socionet", not a keyword or a phrase meant to rank, and it points to <https://socionet.cz/>. The text cannot be edited through `texts`, so a credit never turns into an advertisement for something else.
+- **`rel="nofollow noopener"`, not editable.** Google's [spam policies](https://developers.google.com/search/docs/essentials/spam-policies) name "keyword-rich, hidden, or low-quality links embedded in widgets that are distributed across various sites" and "widely distributed links in the footers or templates of various sites" as link spam, and say that links which are not meant to pass ranking signals should be qualified. A credit in a widget that many sites embed is such a link, so it carries `nofollow`: it is a courtesy for visitors, it passes no ranking credit, and it is not the kind of link the policy is about. `sponsored` and `ugc` are not used, because the link is neither paid nor user-generated (see [qualify your outbound links](https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links)). `noopener` keeps the opened page from reaching your page through `window.opener`.
+- **No tracking.** The link is an ordinary anchor. The banner still makes no request of its own.
 
 Non-configurable design standards: opt-in mode, equal button weights in the first layer, box positioned at the bottom-left, no cookie wall, and consent state preserved in `cc_cookie` for 182 days.
 
@@ -416,7 +423,11 @@ Plain Consent is an independent project and is not affiliated with or endorsed b
 - **Událost `plain-consent:update` (od 2.1.0)** pro váš vlastní kód po každé volbě návštěvníka.
 - **Bezpečná konfigurace.** Veškerý text se escapuje jako HTML, odkazy se ověřují (povoleny jsou jen protokoly `http(s)` a relativní cesty `/`), chybné hodnoty bezpečně přecházejí na výchozí.
 
-Živá ukázka: <https://petrhromadka.github.io/plain-consent/>. Balíček je i na npm (`plain-consent`) a soubory vydání obsluhuje jsDelivr, viz [Quick Start](#quick-start) (stejné soubory, stejné otisky `integrity`).
+Živá ukázka: <https://petrhromadka.github.io/plain-consent/>. Soubory vydání obsluhuje i jsDelivr, viz [Quick Start](#quick-start) (stejné soubory, stejné otisky `integrity`).
+
+### Volitelný odkaz na autora
+
+Banner je zdarma. Chcete-li to dát najevo, přidejte do nastavení `"credit": true` a v patičce banneru se objeví malý odkaz „Lištu poskytuje Socionet“. Ve výchozím stavu je vypnutý a žádný příklad v tomto README ho nezapíná. Odkaz je jen název značky (ne klíčové slovo), vede na <https://socionet.cz/> a má pevné `rel="nofollow noopener"`: podle [zásad Google proti spamu](https://developers.google.com/search/docs/essentials/spam-policies) jsou odkazy ve widgetech a patičkách šířených na mnoha webech odkazovým spamem, pokud nejsou označené, takže `nofollow` je správná hodnota (`sponsored` ani `ugc` nesedí, odkaz není placený ani od návštěvníků). Odkaz nepředává žádnou váhu a banner kvůli němu nedělá žádný požadavek navíc.
 
 ### Rychlé vložení na web
 
