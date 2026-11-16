@@ -200,11 +200,20 @@ The banner is configured through the `<script type="application/json" id="plain-
 | `categories` | `string[]` | `["analytics", "marketing"]` | Optional categories used by your site: `"preferences"`, `"analytics"`, `"marketing"`. |
 | `privacyUrl` | `string` | `""` | Link to your privacy policy: an `http(s)` URL or a path starting with `/`. If empty, no link is displayed. |
 | `consentMode` | `boolean` | `true` | Enables Google Consent Mode v2 default denied state and consent updates. |
-| `credit` | `boolean` | `false` | Shows a small "Consent bar by Socionet" link (`rel="nofollow"`, text in the banner language, not editable) in the banner footer. Off by default; it exists for the hosted variant of the banner. |
+| `credit` | `boolean` | `false` | Shows a small "Consent bar by Socionet" link (`rel="nofollow noopener"`, text in the banner language, not editable) in the banner footer. Off by default; you turn it on yourself if you want to credit the project, see [Optional credit link](#optional-credit-link). The hosted variant at socionet.cz always has it on. |
 | `revision` | `number` | `0` | Configuration revision integer (0-9999). Increment by 1 when adding new services or cookies to prompt returning visitors again. |
 | `language` | `string` | `"cs"` | Language of the built-in texts: `"cs"`, `"sk"`, `"en"`, `"de"`, `"pl"`, or `"auto"` to follow `<html lang>` (an unsupported language gets English). |
 | `respectGpc` | `boolean` | `true` | When the browser sends Global Privacy Control, marketing is not offered or granted. `false` ignores the signal. |
 | `texts` | `object` | *see below* | Text overrides for titles, descriptions, and buttons, applied on top of the chosen language. |
+
+### Optional credit link
+
+Plain Consent is free. If you like it, you can say so: add `"credit": true` to the configuration and the banner footer shows a small "Consent bar by Socionet" link next to your privacy link (in the banner language: "Lištu poskytuje Socionet", "Consent bar by Socionet", "Consent-Leiste von Socionet", "Pasek zgody od Socionet"). Nothing else changes.
+
+- **Off by default.** No snippet in this README enables it, and nothing appears unless you set it. Removing the line removes the link.
+- **Plain brand text.** The linked text is the name "Socionet", not a keyword or a phrase meant to rank, and it points to <https://socionet.cz/>. The text cannot be edited through `texts`, so a credit never turns into an advertisement for something else.
+- **`rel="nofollow noopener"`, not editable.** Google's [spam policies](https://developers.google.com/search/docs/essentials/spam-policies) name "keyword-rich, hidden, or low-quality links embedded in widgets that are distributed across various sites" and "widely distributed links in the footers or templates of various sites" as link spam, and say that links which are not meant to pass ranking signals should be qualified. A credit in a widget that many sites embed is such a link, so it carries `nofollow`: it is a courtesy for visitors, it passes no ranking credit, and it is not the kind of link the policy is about. `sponsored` and `ugc` are not used, because the link is neither paid nor user-generated (see [qualify your outbound links](https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links)). `noopener` keeps the opened page from reaching your page through `window.opener`.
+- **No tracking.** The link is an ordinary anchor. The banner still makes no request of its own.
 
 Non-configurable design standards: opt-in mode, equal button weights in the first layer, box positioned at the bottom-left, no cookie wall, and consent state preserved in `cc_cookie` for 182 days.
 
@@ -417,6 +426,10 @@ Plain Consent is an independent project and is not affiliated with or endorsed b
 - **Bezpečná konfigurace.** Veškerý text se escapuje jako HTML, odkazy se ověřují (povoleny jsou jen protokoly `http(s)` a relativní cesty `/`), chybné hodnoty bezpečně přecházejí na výchozí.
 
 Živá ukázka: <https://petrhromadka.github.io/plain-consent/>. Balíček je i na npm (`plain-consent`) a soubory vydání obsluhuje jsDelivr, viz [Quick Start](#quick-start) (stejné soubory, stejné otisky `integrity`).
+
+### Volitelný odkaz na autora
+
+Banner je zdarma. Chcete-li to dát najevo, přidejte do nastavení `"credit": true` a v patičce banneru se objeví malý odkaz „Lištu poskytuje Socionet“. Ve výchozím stavu je vypnutý a žádný příklad v tomto README ho nezapíná. Odkaz je jen název značky (ne klíčové slovo), vede na <https://socionet.cz/> a má pevné `rel="nofollow noopener"`: podle [zásad Google proti spamu](https://developers.google.com/search/docs/essentials/spam-policies) jsou odkazy ve widgetech a patičkách šířených na mnoha webech odkazovým spamem, pokud nejsou označené, takže `nofollow` je správná hodnota (`sponsored` ani `ugc` nesedí, odkaz není placený ani od návštěvníků). Odkaz nepředává žádnou váhu a banner kvůli němu nedělá žádný požadavek navíc.
 
 ### Rychlé vložení na web
 
