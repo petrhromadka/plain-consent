@@ -2,15 +2,35 @@
   "name": "plain-consent",
   "version": "2.2.0",
   "description": "Plain Consent: a free, dependency-free cookie consent banner, built on vanilla-cookieconsent. Opt-in, Google Consent Mode v2, Subresource Integrity, strict-CSP friendly.",
-  "private": true,
+  "keywords": [
+    "cookie-consent",
+    "cookie-banner",
+    "consent-banner",
+    "gdpr",
+    "eprivacy",
+    "google-consent-mode",
+    "consent-mode-v2",
+    "global-privacy-control",
+    "subresource-integrity",
+    "csp",
+    "opt-in",
+    "czech"
+  ],
   "type": "module",
   "license": "MIT",
-  "author": "Petr Hromádka (Socionet, https://socionet.cz)",
-  "homepage": "https://github.com/petrhromadka/plain-consent",
+  "author": "Socionet <info@socionet.cz> (https://socionet.cz)",
+  "homepage": "https://socionet.cz/nastroje/cookie-lista/",
+  "bugs": {
+    "url": "https://github.com/petrhromadka/plain-consent/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/petrhromadka/plain-consent.git"
   },
+  "files": [
+    "releases/",
+    "NOTICE"
+  ],
   "engines": {
     "node": ">=24"
   },
