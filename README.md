@@ -6,7 +6,7 @@ A free, lightweight, dependency-free cookie consent banner with Google Consent M
 The banner speaks Czech, Slovak, English, German and Polish out of the box (Czech is the default, `"language": "auto"` follows `<html lang>`), and every text is fully configurable so you can translate it into any other language. [Česká verze níže](#česky).
 
 - **Licence:** MIT (see [LICENSE](LICENSE) and [NOTICE](NOTICE))
-- **Current release:** [`releases/v2.2.0/`](releases/v2.2.0/)
+- **Current release:** [`releases/v2.2.1/`](releases/v2.2.1/)
 - **Live demo:** <https://petrhromadka.github.io/plain-consent/> (the banner under a strict CSP, five languages, a blocked script and a blocked embed)
 - **CDN:** the release files are also served by jsDelivr (see [Quick Start](#quick-start))
 - **Hosted generator (Czech):** <https://socionet.cz/nastroje/cookie-lista/>
@@ -50,15 +50,15 @@ Blocked embeds show a placeholder (here on a phone, in English) and the round se
 
 ### 1. Embed the Banner
 
-You can self-host the release files (recommended for v2.2.0) or use the hosted endpoint for v1.0.0.
+You can self-host the release files (recommended for v2.2.1) or use the hosted endpoint for v1.0.0.
 
-#### Option A: Self-hosted (Recommended for v2.2.0)
+#### Option A: Self-hosted (Recommended for v2.2.1)
 
-1. Download `plain-consent.js` and `plain-consent.css` from [`releases/v2.2.0/`](releases/v2.2.0/) and place them on your web server (for example at `/plain-consent/v2.2.0/`).
+1. Download `plain-consent.js` and `plain-consent.css` from [`releases/v2.2.1/`](releases/v2.2.1/) and place them on your web server (for example at `/plain-consent/v2.2.1/`).
 2. Add this snippet inside the `<head>` of your page, **before** all other scripts (especially before the Google tag):
 
 ```html
-<link rel="stylesheet" href="/plain-consent/v2.2.0/plain-consent.css" integrity="sha384-UigpuEPI8sZ22V7UM8A95UEmcs6VT3cmYC49ue/wrNcQw0Vm9Hf6SsjkLv0C7zlM" crossorigin="anonymous">
+<link rel="stylesheet" href="/plain-consent/v2.2.1/plain-consent.css" integrity="sha384-niLnNVy/XI8vOa0k0PYliWuK1nNI83RNF/Yu5qK6U/YBeo5oMchahPJsoE2alZoi" crossorigin="anonymous">
 <script type="application/json" id="plain-consent-config">
 {
   "accent": "#1f2937",
@@ -69,19 +69,19 @@ You can self-host the release files (recommended for v2.2.0) or use the hosted e
   "revision": 0
 }
 </script>
-<script src="/plain-consent/v2.2.0/plain-consent.js" integrity="sha384-49/hm1U4h5BoIV9XtX4ORW+YCses85oU2wvNtqvepXLNiRpD8p2VBcdJRwRDA9Fi" crossorigin="anonymous"></script>
+<script src="/plain-consent/v2.2.1/plain-consent.js" integrity="sha384-kr3lP6/BAlK4kVRvCRAL3c1NhNskJ4XE7jZYgs3uiwU4hkyk5zxbzkPXoyEuv8cL" crossorigin="anonymous"></script>
 ```
 
 > [!NOTE]
 > If you host the files under a different path, update the `href` and `src` attributes. The `integrity` hashes remain unchanged because the files are byte-identical. Make sure your web server or CDN does not modify the files (such as automatic minification or script injection), or the browser will block them.
 
-#### Option B: jsDelivr (v2.2.0)
+#### Option B: jsDelivr (v2.2.1)
 
 jsDelivr serves the git tag of this repository. The release files are byte-identical, so the `integrity` hashes of Option A hold. Use only the `href` and `src` of the snippet above with these URLs (the [live demo](https://petrhromadka.github.io/plain-consent/) does exactly this):
 
 ```text
-https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.0/releases/v2.2.0/plain-consent.css
-https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.0/releases/v2.2.0/plain-consent.js
+https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.1/releases/v2.2.1/plain-consent.css
+https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.1/releases/v2.2.1/plain-consent.js
 ```
 
 Pin the exact tag, never a branch or `@latest`, as the hashes belong to one release. As with any third-party CDN, the visitor's browser then connects to jsDelivr; self-host (Option A) if you do not want that.
@@ -336,10 +336,15 @@ Published releases under `releases/vN.N.N/` are **immutable**. A published relea
 
 | Version | Released | JavaScript | CSS | Vendor Library |
 | --- | --- | --- | --- | --- |
+| **2.2.1** | 2026-11-16 | `plain-consent.js` | `plain-consent.css` | vanilla-cookieconsent 3.1.0 |
 | **2.2.0** | 2026-11-11 | `plain-consent.js` | `plain-consent.css` | vanilla-cookieconsent 3.1.0 |
 | **2.1.0** | 2026-11-11 | `plain-consent.js` | `plain-consent.css` | vanilla-cookieconsent 3.1.0 |
 | **2.0.0** | 2026-11-09 | `plain-consent.js` | `plain-consent.css` | vanilla-cookieconsent 3.1.0 |
 | **1.0.0** | 2026-11-09 | `cookie-lista.js` | `cookie-lista.css` | vanilla-cookieconsent 3.1.0 |
+
+### What is new in 2.2.1
+
+2.2.1 is a bug-fix version for sites that set a pill-shaped `--cc-btn-border-radius` (for example `9999px`): an expanded category in the settings kept the pill corners and clipped its description. An expanded category now uses `--cc-pm-section-border-radius`, which defaults to `min(var(--cc-btn-border-radius), 1.4rem)` (a site can set its own), and the description has a little more padding. The collapsed rows, the buttons and every default theme look as before. Files and hashes of 1.0.0, 2.0.0, 2.1.0 and 2.2.0 are untouched. Upgrade by replacing the two file URLs and the two `integrity` values.
 
 ### What is new in 2.2.0
 
@@ -431,11 +436,11 @@ Banner je zdarma. Chcete-li to dát najevo, přidejte do nastavení `"credit": t
 
 ### Rychlé vložení na web
 
-1. Stáhněte `plain-consent.js` a `plain-consent.css` ze složky [`releases/v2.2.0/`](releases/v2.2.0/) na svůj server (např. do `/plain-consent/v2.2.0/`).
+1. Stáhněte `plain-consent.js` a `plain-consent.css` ze složky [`releases/v2.2.1/`](releases/v2.2.1/) na svůj server (např. do `/plain-consent/v2.2.1/`).
 2. Vložte kód do `<head>` před ostatní skripty:
 
 ```html
-<link rel="stylesheet" href="/plain-consent/v2.2.0/plain-consent.css" integrity="sha384-UigpuEPI8sZ22V7UM8A95UEmcs6VT3cmYC49ue/wrNcQw0Vm9Hf6SsjkLv0C7zlM" crossorigin="anonymous">
+<link rel="stylesheet" href="/plain-consent/v2.2.1/plain-consent.css" integrity="sha384-niLnNVy/XI8vOa0k0PYliWuK1nNI83RNF/Yu5qK6U/YBeo5oMchahPJsoE2alZoi" crossorigin="anonymous">
 <script type="application/json" id="plain-consent-config">
 {
   "accent": "#1f2937",
@@ -446,7 +451,7 @@ Banner je zdarma. Chcete-li to dát najevo, přidejte do nastavení `"credit": t
   "revision": 0
 }
 </script>
-<script src="/plain-consent/v2.2.0/plain-consent.js" integrity="sha384-49/hm1U4h5BoIV9XtX4ORW+YCses85oU2wvNtqvepXLNiRpD8p2VBcdJRwRDA9Fi" crossorigin="anonymous"></script>
+<script src="/plain-consent/v2.2.1/plain-consent.js" integrity="sha384-kr3lP6/BAlK4kVRvCRAL3c1NhNskJ4XE7jZYgs3uiwU4hkyk5zxbzkPXoyEuv8cL" crossorigin="anonymous"></script>
 ```
 
 3. Skripty vyžadující souhlas označte atributem `type="text/plain"` a kategorií `data-category="analytics"` (nebo `marketing`, `preferences`).

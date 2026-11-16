@@ -12,6 +12,28 @@
   color: inherit;
 }
 
+/* The expanded category in the settings. A site that sets a pill-shaped --cc-btn-border-radius (9999px) keeps the pill
+   look for the collapsed row and the buttons, but an expanded category holds a paragraph of text, and a pill's corners
+   would clip it. --cc-pm-section-border-radius is the radius of the expanded category: by default the button radius,
+   capped at 1.4rem; a site can set its own. */
+#cc-main .pm__section--toggle.is-expanded {
+  border-radius: var(--cc-pm-section-border-radius, min(var(--cc-btn-border-radius), 1.4rem));
+}
+
+#cc-main .pm__section--toggle.is-expanded .pm__section-title {
+  border-top-left-radius: var(--cc-pm-section-border-radius, min(var(--cc-btn-border-radius), 1.4rem));
+  border-top-right-radius: var(--cc-pm-section-border-radius, min(var(--cc-btn-border-radius), 1.4rem));
+}
+
+#cc-main .pm__section--toggle.is-expanded .pm__section-desc-wrapper {
+  border-bottom-left-radius: var(--cc-pm-section-border-radius, min(var(--cc-btn-border-radius), 1.4rem));
+  border-bottom-right-radius: var(--cc-pm-section-border-radius, min(var(--cc-btn-border-radius), 1.4rem));
+}
+
+#cc-main .pm__section--toggle .pm__section-desc {
+  padding: 1em 1.2em 1.1em;
+}
+
 /* The round button that reopens the settings after a choice, so consent can be withdrawn as easily as it was given. */
 .plain-consent-settings {
   position: fixed;
