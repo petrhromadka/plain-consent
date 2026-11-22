@@ -3,12 +3,14 @@
 A free, lightweight, dependency-free cookie consent banner with Google Consent Mode v2, Subresource Integrity, and strict Content-Security-Policy compliance. Built on [vanilla-cookieconsent](https://github.com/orestbida/cookieconsent) (MIT).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![npm](https://img.shields.io/npm/v/plain-consent.svg)](https://www.npmjs.com/package/plain-consent)
+
 The banner speaks Czech, Slovak, English, German and Polish out of the box (Czech is the default, `"language": "auto"` follows `<html lang>`), and every text is fully configurable so you can translate it into any other language. [Česká verze níže](#česky).
 
 - **Licence:** MIT (see [LICENSE](LICENSE) and [NOTICE](NOTICE))
 - **Current release:** [`releases/v2.2.1/`](releases/v2.2.1/)
 - **Live demo:** <https://petrhromadka.github.io/plain-consent/> (the banner under a strict CSP, five languages, a blocked script and a blocked embed)
-- **CDN:** the release files are also served by jsDelivr (see [Quick Start](#quick-start))
+- **npm:** [`plain-consent`](https://www.npmjs.com/package/plain-consent), also served by jsDelivr (see [Quick Start](#quick-start))
 - **Hosted generator (Czech):** <https://socionet.cz/nastroje/cookie-lista/>
 - **Author:** [Socionet](https://socionet.cz/)
 
@@ -75,16 +77,16 @@ You can self-host the release files (recommended for v2.2.1) or use the hosted e
 > [!NOTE]
 > If you host the files under a different path, update the `href` and `src` attributes. The `integrity` hashes remain unchanged because the files are byte-identical. Make sure your web server or CDN does not modify the files (such as automatic minification or script injection), or the browser will block them.
 
-#### Option B: jsDelivr (v2.2.1)
+#### Option B: jsDelivr or npm (v2.2.1)
 
-jsDelivr serves the git tag of this repository. The release files are byte-identical, so the `integrity` hashes of Option A hold. Use only the `href` and `src` of the snippet above with these URLs (the [live demo](https://petrhromadka.github.io/plain-consent/) does exactly this):
+The release files are byte-identical everywhere, so the `integrity` hashes of Option A hold for every source below. Use only the `href` and `src` of the snippet above with these URLs:
 
 ```text
-https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.1/releases/v2.2.1/plain-consent.css
-https://cdn.jsdelivr.net/gh/petrhromadka/plain-consent@v2.2.1/releases/v2.2.1/plain-consent.js
+https://cdn.jsdelivr.net/npm/plain-consent@2.2.1/releases/v2.2.1/plain-consent.css
+https://cdn.jsdelivr.net/npm/plain-consent@2.2.1/releases/v2.2.1/plain-consent.js
 ```
 
-Pin the exact tag, never a branch or `@latest`, as the hashes belong to one release. As with any third-party CDN, the visitor's browser then connects to jsDelivr; self-host (Option A) if you do not want that.
+Pin the exact version, never `@latest`, as the hashes belong to one release. To self-host from npm instead, run `npm install plain-consent` and copy the two files from `node_modules/plain-consent/releases/v2.2.1/`. As with any third-party CDN, the visitor's browser then connects to jsDelivr; self-host (Option A) if you do not want that.
 
 #### Option C: Hosted CDN (socionet.cz - v1.0.0)
 
@@ -428,7 +430,7 @@ Plain Consent is an independent project and is not affiliated with or endorsed b
 - **Událost `plain-consent:update` (od 2.1.0)** pro váš vlastní kód po každé volbě návštěvníka.
 - **Bezpečná konfigurace.** Veškerý text se escapuje jako HTML, odkazy se ověřují (povoleny jsou jen protokoly `http(s)` a relativní cesty `/`), chybné hodnoty bezpečně přecházejí na výchozí.
 
-Živá ukázka: <https://petrhromadka.github.io/plain-consent/>. Soubory vydání obsluhuje i jsDelivr, viz [Quick Start](#quick-start) (stejné soubory, stejné otisky `integrity`).
+Živá ukázka: <https://petrhromadka.github.io/plain-consent/>. Balíček je i na npm (`plain-consent`) a soubory vydání obsluhuje jsDelivr, viz [Quick Start](#quick-start) (stejné soubory, stejné otisky `integrity`).
 
 ### Volitelný odkaz na autora
 
